@@ -33,20 +33,20 @@ function login() {
               name,
               email,
               profilePicture,
-              status: "",
+              about: "",
             },
           });
           router.push("/onboarding");
         } else {
-          const { id, name, email, profilePicture, status } = data;
+          const { id, name, email, profilePicture, about } = data.data;
           dispatch({
             type: reducerCases.SET_USER_INFO,
             userInfo: {
-              id,
+              id: id,
               name,
               email,
               profilePicture,
-              status,
+              about,
             },
           });
           router.push("/");

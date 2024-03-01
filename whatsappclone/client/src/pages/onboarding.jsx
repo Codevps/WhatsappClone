@@ -1,6 +1,7 @@
 import Avatar from "@/components/common/Avatar";
 import Input from "@/components/common/Input";
 import { useStateProvider } from "@/context/StateContext";
+import { reducerCases } from "@/context/constants";
 import { ONBOARD_USER_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import Image from "next/image";
@@ -24,7 +25,6 @@ function onboarding() {
     }
     return true;
   };
-
   useEffect(() => {
     if (!newUser && !userInfo?.email) router.push("/login");
     else if (!newUser && userInfo?.email) router.push("/");
@@ -44,11 +44,11 @@ function onboarding() {
           dispatch({
             type: reducerCases.SET_USER_INFO,
             userInfo: {
-              id: data.id,
+              id: data?.data?.id,
               name,
               email,
-              profileImage: image,
-              status: about,
+              profilePicture: image,
+              about,
             },
           });
           router.push("/");
