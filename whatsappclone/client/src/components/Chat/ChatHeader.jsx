@@ -8,6 +8,7 @@ import { useStateProvider } from "@/context/StateContext";
 
 function ChatHeader() {
   const [{ currentChatUser }, dispatch] = useStateProvider();
+
   return (
     <div className="h-16 py-3 flex justify-between items-center bg-panel-header-background z-10">
       <div className="flex items-center justify-center gap-6">
