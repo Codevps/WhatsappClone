@@ -1,4 +1,7 @@
 import { useStateProvider } from "@/context/StateContext";
+import { reducerCases } from "@/context/constants";
+import { ADD_AUDIO_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
+import axios from "axios";
 import { URL } from "next/dist/compiled/@edge-runtime/primitives/url";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -44,8 +47,8 @@ function CaptureAudio({ hide }) {
   useEffect(() => {
     const wavesurfer = WaveSurfer.create({
       container: waveformRef.current,
-      waveColor: "#ccc",
-      progressColor: "#4a9eff",
+      waveColor: "#4a9eff",
+      progressColor: "tomato",
       cursorColor: "#7ae3c3",
       barWidth: 2,
       height: 30,
@@ -139,7 +142,37 @@ function CaptureAudio({ hide }) {
     setIsPlaying(false);
   };
 
-  const sendRecording = async () => {};
+  const sendRecording = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("audio", renderAudio);
+      const response = await axios.post(ADD_AUDIO_MESSAGE_ROUTE, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        params: {
+          from: userInfo.id,
+          to: currentChatUser.id,
+        },
+      });
+      if (response.status == 201) {
+        socket.current.emit("send-msg", {
+          to: currentChatUser?.id,
+          from: userInfo?.id,
+          message: response.data.message,
+        });
+        dispatch({
+          type: reducerCases.ADD_MESSAGE,
+          newMessage: {
+            ...response.data.message,
+          },
+          fromSelf: true,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const formatTime = (time) => {
     if (isNaN(time)) return "00:00";
