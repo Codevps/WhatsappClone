@@ -72,7 +72,8 @@ export const addImageMessage = async (req, res, next) => {
   try {
     if (req.file) {
       const date = Date.now();
-      let fileName = "uploads/images/" + date + req.file.originalName;
+
+      let fileName = "uploads/images/" + date + req.file.originalname;
       renameSync(req.file.path, fileName);
       const prisma = getPrismaInstance();
       const { from, to } = req.query;
