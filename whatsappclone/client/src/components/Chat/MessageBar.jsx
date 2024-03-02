@@ -9,11 +9,20 @@ import { FaMicrophone } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
 import { MdSend } from "react-icons/md";
 import PhotoPicker from "../common/PhotoPicker";
+import dynamic from "next/dynamic";
+
+// __________Important Settings_________________
+const CaptureAudio = dynamic(() => import("../common/CaptureAudio"), {
+  ssr: false,
+});
+// ______________________________________________________
+
 function MessageBar() {
   const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [grabPhoto, setGrabPhoto] = useState(false);
+  const [showAudioRecorder, setShowAudioRecorder] = useState(false);
   const emojiPickerRef = useRef(null);
 
   const handleEmojiModel = () => {
@@ -113,47 +122,60 @@ function MessageBar() {
   return (
     <div className="bg-panel-header-background h-20 px-4 flex items-center gap-6 relative ">
       <>
-        <div className="flex gap-6 items-center">
-          <BsEmojiSmile
-            className="text-panel-header-icon cursor-pointer text-xl"
-            title="Emoji"
-            id="emoji-open"
-            onClick={handleEmojiModel}
-          />
-          {showEmojiPicker && (
-            <div
-              className="absolute bottom-24 left-16 z-40"
-              ref={emojiPickerRef}
-            >
-              <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
-            </div>
-          )}
-          <ImAttachment
-            className="text-panel-header-icon cursor-pointer text-xl"
-            title="File attachment"
-            onClick={() => setGrabPhoto(!grabPhoto)}
-          />
-          <div className="w-full rounded-lg h-10 flex items-center">
-            <input
-              value={message}
-              type="text"
-              className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-[59vw]"
-              placeholder="Type a message"
-              onChange={(e) => setMessage(e.target.value)}
+        {!showAudioRecorder && (
+          <div className="flex gap-6 items-center">
+            <BsEmojiSmile
+              className="text-panel-header-icon cursor-pointer text-xl"
+              title="Emoji"
+              id="emoji-open"
+              onClick={handleEmojiModel}
             />
+            {showEmojiPicker && (
+              <div
+                className="absolute bottom-24 left-16 z-40"
+                ref={emojiPickerRef}
+              >
+                <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+              </div>
+            )}
+            <ImAttachment
+              className="text-panel-header-icon cursor-pointer text-xl"
+              title="File attachment"
+              onClick={() => setGrabPhoto(!grabPhoto)}
+            />
+            <div className="w-full rounded-lg h-10 flex items-center">
+              <input
+                value={message}
+                type="text"
+                className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-[62vw]"
+                placeholder="Type a message"
+                onChange={(e) => setMessage(e.target.value)}
+              />
+            </div>
+            <button>
+              {message.length ? (
+                <MdSend
+                  onClick={sendMessage}
+                  className="text-teal-500 cursor-pointer text-[1.45rem] "
+                  title="SendMessage"
+                />
+              ) : (
+                <FaMicrophone
+                  className={`text-teal-500 cursor-pointer text-[1.45rem] m-[auto]
+            ${showAudioRecorder && "text-red-500"}
+            `}
+                  title="Send Voice Note"
+                  onClick={() => {
+                    setShowAudioRecorder(!showAudioRecorder);
+                  }}
+                />
+              )}
+            </button>
           </div>
-          <MdSend
-            onClick={sendMessage}
-            className="text-panel-header-icon cursor-pointer text-xl "
-            title="SendMessage"
-          />
-          <FaMicrophone
-            className="text-panel-header-icon cursor-pointer text-xl  "
-            title="Send Voice Note"
-          />
-        </div>
+        )}
       </>
       {grabPhoto && <PhotoPicker onChange={PhotoPickerChange} />}
+      {showAudioRecorder && <CaptureAudio hide={setShowAudioRecorder} />}
     </div>
   );
 }
