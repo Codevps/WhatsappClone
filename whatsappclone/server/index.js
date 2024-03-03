@@ -84,4 +84,11 @@ io.on("connection", (socket) => {
     const sendUserSocket = onlineUsers.get(id);
     socket.to(sendUserSocket).emit("accept-call");
   });
+
+  socket.on("signout", ({ id }) => {
+    onlineUsers.delete(id);
+    socket.broadcast.emit("online-users", {
+      onlineUsers: Array.from(onlineUsers.keys()),
+    });
+  });
 });
