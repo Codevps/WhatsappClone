@@ -4,7 +4,7 @@ import { GET_ALL_CONTACTS } from "@/utils/ApiRoutes";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import ChatLIstItem from "./ChatLIstItem";
+import ChatListItem from "./ChatListItem";
 
 function ContactsList() {
   const [allContacts, setAllContacts] = useState([]);
@@ -43,7 +43,7 @@ function ContactsList() {
             <div className="text-teal-light pl-10 py-5">{initialLetter}</div>
             {userList.map((contact) => {
               return (
-                <ChatLIstItem
+                <ChatListItem
                   data={contact}
                   isContactPage={true}
                   key={contact.id}

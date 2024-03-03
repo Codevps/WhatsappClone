@@ -4,7 +4,7 @@ import { GET_INITIAL_CONTACTS_ROUTE, HOST } from "@/utils/ApiRoutes";
 import axios from "axios";
 import React, { useEffect } from "react";
 import ChatList from "./ChatList";
-import ChatLIstItem from "./ChatLIstItem";
+import ChatListItem from "./ChatListItem";
 
 function List() {
   const [{ userInfo, userContacts }, dispatch] = useStateProvider();
@@ -19,13 +19,14 @@ function List() {
       } catch (error) {
         console.error(error);
       }
+      // dispatch({ type: reducerCases.SET_ALL_CONTACTS_PAGE });
     };
     getContacts();
   }, [userInfo]);
   return (
     <div className="bg-search-input-container-background flex-auto overflow-auto max-h-full custom-scrollbar">
       {userContacts.map((contact) => (
-        <ChatLIstItem data={contact} key={contact?.id} />
+        <ChatListItem data={contact} key={contact?.id} />
       ))}
     </div>
   );

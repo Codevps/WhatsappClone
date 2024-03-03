@@ -3,7 +3,7 @@ import Avatar from "../common/Avatar";
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
 
-function ChatLIstItem({ data, isContactPage = false }) {
+function ChatListItem({ data, isContactPage = false }) {
   const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
   const handleContactClick = () => {
     // if (currentChatUser?.id === data?.id) {
@@ -41,4 +41,4 @@ function ChatLIstItem({ data, isContactPage = false }) {
   );
 }
 
-export default ChatLIstItem;
+export default ChatListItem;
