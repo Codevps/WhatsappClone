@@ -47,7 +47,7 @@ function ChatContainer() {
                     </div>
                   </div>
                 )}
-                {message.type === "image" && <ImageMessage message={message} />}{" "}
+                {message.type === "image" && <ImageMessage message={message} />}
                 {message.type === "audio" && <VoiceMessage message={message} />}
               </div>
             ))}

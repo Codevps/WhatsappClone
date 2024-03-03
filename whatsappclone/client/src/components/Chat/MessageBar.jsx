@@ -120,10 +120,10 @@ function MessageBar() {
   }, [emojiPickerRef]);
 
   return (
-    <div className="bg-panel-header-background h-20 px-4 flex items-center gap-6 relative ">
+    <div className="bg-panel-header-background h-20 px-4 flex items-center gap-6  relative ">
       <>
         {!showAudioRecorder && (
-          <div className="flex gap-6 items-center">
+          <div className="flex gap-6 items-center w-full justify-around">
             <BsEmojiSmile
               className="text-panel-header-icon cursor-pointer text-xl"
               title="Emoji"
@@ -147,30 +147,30 @@ function MessageBar() {
               <input
                 value={message}
                 type="text"
-                className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-[62vw]"
+                className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-[92%]"
                 placeholder="Type a message"
                 onChange={(e) => setMessage(e.target.value)}
               />
+              <button className="pl-4">
+                {message.length ? (
+                  <MdSend
+                    onClick={sendMessage}
+                    className="text-teal-500 cursor-pointer text-[1.45rem] "
+                    title="SendMessage"
+                  />
+                ) : (
+                  <FaMicrophone
+                    className={`text-teal-500 cursor-pointer text-[1.45rem] m-[auto]
+                  ${showAudioRecorder && "text-red-500"}
+                  `}
+                    title="Send Voice Note"
+                    onClick={() => {
+                      setShowAudioRecorder(!showAudioRecorder);
+                    }}
+                  />
+                )}
+              </button>
             </div>
-            <button>
-              {message.length ? (
-                <MdSend
-                  onClick={sendMessage}
-                  className="text-teal-500 cursor-pointer text-[1.45rem] "
-                  title="SendMessage"
-                />
-              ) : (
-                <FaMicrophone
-                  className={`text-teal-500 cursor-pointer text-[1.45rem] m-[auto]
-            ${showAudioRecorder && "text-red-500"}
-            `}
-                  title="Send Voice Note"
-                  onClick={() => {
-                    setShowAudioRecorder(!showAudioRecorder);
-                  }}
-                />
-              )}
-            </button>
           </div>
         )}
       </>

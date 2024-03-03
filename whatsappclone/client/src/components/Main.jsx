@@ -10,9 +10,11 @@ import { io } from "socket.io-client";
 import Chat from "./Chat/Chat";
 import ChatList from "./ChatList/ChatList";
 import Empty from "./Empty";
+import SearchMessages from "./Chat/SearchMessages";
 
 function Main() {
-  const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
+  const [{ userInfo, currentChatUser, messagesSearch }, dispatch] =
+    useStateProvider();
   const router = useRouter();
   const [redirectLogin, setRedirectLogin] = useState(false);
   const socket = useRef();
@@ -82,7 +84,14 @@ function Main() {
     <>
       <div className="grid grid-cols-main h-screen w-screen max-h-screen max-w-full overflow-hidden">
         <ChatList />
-        {currentChatUser ? <Chat /> : <Empty />}
+        {currentChatUser ? (
+          <div className={messagesSearch ? "grid grid-cols-2" : "grid-cols-2"}>
+            <Chat />
+            {messagesSearch && <SearchMessages />}
+          </div>
+        ) : (
+          <Empty />
+        )}
       </div>
     </>
   );
