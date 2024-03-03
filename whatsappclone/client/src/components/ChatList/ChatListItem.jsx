@@ -2,18 +2,26 @@ import React from "react";
 import Avatar from "../common/Avatar";
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
+import { calculateTime } from "@/utils/CalculateTime";
+import MessageStatus from "../common/MessageStatus";
+import { FaMicrophone } from "react-icons/fa";
+import { IoCamera } from "react-icons/io5";
 
 function ChatListItem({ data, isContactPage = false }) {
   const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
   const handleContactClick = () => {
-    // if (currentChatUser?.id === data?.id) {
-    dispatch({
-      type: reducerCases.CHANGE_CURRENT_CHAT_USER,
-      user: { ...data },
-    });
-    // currentChatUser: { data },
-    dispatch({ type: reducerCases.SET_ALL_CONTACTS_PAGE });
-    // }
+    if (!isContactPage) {
+      dispatch({
+        type: reducerCases.CHANGE_CURRENT_CHAT_USER,
+        user: { ...data },
+      });
+    } else {
+      dispatch({
+        type: reducerCases.CHANGE_CURRENT_CHAT_USER,
+        user: { ...data },
+      });
+      dispatch({ type: reducerCases.SET_ALL_CONTACTS_PAGE });
+    }
   };
   return (
     <div
@@ -28,12 +36,62 @@ function ChatListItem({ data, isContactPage = false }) {
           <div className="">
             <span className="text-white">{data?.name}</span>
           </div>
+          {!isContactPage && (
+            <div>
+              <span
+                className={`${
+                  data.totalUnreadMessages > 0
+                    ? "text-secondary"
+                    : "text-icon-green"
+                } text-sm`}
+              >
+                {calculateTime(data.createdAt)}
+              </span>
+            </div>
+          )}
         </div>
         <div className="flex border-b border-conversation-border pb-2 pt-1 pr-2">
           <div className="flex justify-between w-full">
             <span className="text-secondary line-clamp-1 text-sm">
-              {data?.about || "\u00a0"}
+              {isContactPage ? (
+                data?.about || "\u00a0"
+              ) : (
+                <div
+                  className="flex items-center gap-1 
+                  max-w-[200px]
+                sm:max-w-[250px]
+                md:max-w-[300px]
+                lg:max-w-[200px]
+                xl:max-w-[300px]
+                
+                "
+                >
+                  {data.senderId === userInfo.id && (
+                    <MessageStatus messageStatus={data.messageStatus} />
+                  )}{" "}
+                  {data.type === "text" && (
+                    <span className="truncate">{data.message}</span>
+                  )}{" "}
+                  {data.type === "image" && (
+                    <>
+                      <IoCamera className="text-secondary" />
+                      <span className="truncate">Image</span>
+                    </>
+                  )}
+                  {data.type === "audio" && (
+                    <>
+                      <FaMicrophone className="text-secondary" />
+                      <span className="truncate">Voice Note</span>
+                    </>
+                  )}
+                </div>
+              )}
             </span>
+            {data.totalUnreadMessages > 0 && (
+              <span className="bg-icon-green px-[5px] rounded-full text-sm">
+                {data.totalUnreadMessages}
+              </span>
+            )}
           </div>
         </div>
       </div>

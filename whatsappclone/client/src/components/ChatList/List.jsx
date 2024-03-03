@@ -7,7 +7,8 @@ import ChatList from "./ChatList";
 import ChatListItem from "./ChatListItem";
 
 function List() {
-  const [{ userInfo, userContacts }, dispatch] = useStateProvider();
+  const [{ userInfo, userContacts, filteredContacts }, dispatch] =
+    useStateProvider();
   useEffect(() => {
     const getContacts = async () => {
       try {
@@ -19,15 +20,18 @@ function List() {
       } catch (error) {
         console.error(error);
       }
-      // dispatch({ type: reducerCases.SET_ALL_CONTACTS_PAGE });
     };
     getContacts();
-  }, [userInfo]);
+  }, [userInfo, userContacts]);
   return (
     <div className="bg-search-input-container-background flex-auto overflow-auto max-h-full custom-scrollbar">
-      {userContacts.map((contact) => (
-        <ChatListItem data={contact} key={contact?.id} />
-      ))}
+      {filteredContacts && filteredContacts.length > 0
+        ? filteredContacts.map((contact) => (
+            <ChatListItem data={contact} key={contact?.id} />
+          ))
+        : userContacts.map((contact) => (
+            <ChatListItem data={contact} key={contact?.id} />
+          ))}
     </div>
   );
 }
