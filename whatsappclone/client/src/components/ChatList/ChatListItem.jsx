@@ -87,11 +87,11 @@ function ChatListItem({ data, isContactPage = false }) {
                 </div>
               )}
             </span>
-            {data.totalUnreadMessages > 0 && (
+            {/* {data.totalUnreadMessages > 0 && (
               <span className="bg-icon-green px-[5px] rounded-full text-sm">
                 {data.totalUnreadMessages}
               </span>
-            )}
+            )} */}
           </div>
         </div>
       </div>
